@@ -1,0 +1,14 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./packages/client"
+    },
+    {
+      "path": "./packages/server/tsconfig.dist.json"
+    },
+    {
+      "path": "./packages/auth0/tsconfig.dist.json"
+    }
+  ]
+}
