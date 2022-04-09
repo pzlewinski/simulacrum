@@ -13,7 +13,7 @@ import { getServiceUrl } from './get-service-url';
 import { createRulesRunner } from '../rules/rules-runner';
 import type { RuleUser } from '../rules/types';
 import { decode as decodeToken } from 'jsonwebtoken';
-import { issueRefreshToken } from '../auth/refresh-token';
+import { createRefreshToken, issueRefreshToken } from '../auth/refresh-token';
 
 export type Routes =
   | '/heartbeat'
@@ -247,12 +247,8 @@ export const createAuth0Handlers = (options: Options): Record<Routes, HttpHandle
       };
 
       if(issueRefreshToken(scope)){
-        response.refresh_token = createJsonWebToken({
-          exp: idTokenData.exp,
-          iat: epochTime(),
-          rotations:0,
-          scope,
-        });
+        let refreshTokenPayload = createRefreshToken({ exp: idTokenData.exp, scope });
+        req.session.refresh_token = response.refresh_token = createJsonWebToken(refreshTokenPayload);
       }
 
       res.status(200).json(response);
