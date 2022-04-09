@@ -47,11 +47,11 @@ function * createSimulation(client: Client, rulesDirectory: Fixtures) {
     headers: {
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify({
-      ...Fields,
-      username: person.data.email,
-      password: person.data.password,
-    })
+      body: JSON.stringify({
+        ...Fields,
+        username: person.data.email,
+        password: person.data.password,
+      })
   });
 
   let res: Response = yield fetch(`https://localhost:4400/login/callback`, {

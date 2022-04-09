@@ -31,6 +31,8 @@ export type Options = Auth0Configuration & {
 
 export type ResponseModes = 'query' | 'web_message';
 
+export type GrantType = 'authorization_code' | 'refresh_token' | 'password';
+
 export type QueryParams = {
   state: string;
   code: string;

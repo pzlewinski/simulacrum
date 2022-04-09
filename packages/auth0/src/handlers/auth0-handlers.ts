@@ -1,5 +1,5 @@
 import type { HttpHandler, Middleware, Person, Store } from '@simulacrum/server';
-import type { AccessTokenPayload, IdTokenData, Options, QueryParams, ResponseModes } from '../types';
+import type { AccessTokenPayload, IdTokenData, Options, QueryParams, ResponseModes, TokenSet } from '../types';
 import { createLoginRedirectHandler } from './login-redirect';
 import { createWebMessageHandler } from './web-message';
 import { loginView } from '../views/login';
@@ -13,6 +13,7 @@ import { getServiceUrl } from './get-service-url';
 import { createRulesRunner } from '../rules/rules-runner';
 import type { RuleUser } from '../rules/types';
 import { decode as decodeToken } from 'jsonwebtoken';
+import { issueRefreshToken } from '../auth/refresh-token';
 
 export type Routes =
   | '/heartbeat'
@@ -176,7 +177,7 @@ export const createAuth0Handlers = (options: Options): Record<Routes, HttpHandle
         username = req.body.username;
         password = req.body.password;
       } else {
-        assert(typeof code !== 'undefined', 'no code in /oauth/token');
+        assert(typeof code !== 'undefined', 'no authorization code in /oauth/token');
 
         [nonce, username] = decode(code).split(":");
       }
@@ -238,12 +239,23 @@ export const createAuth0Handlers = (options: Options): Record<Routes, HttpHandle
         ...context.accessToken
       };
 
-      res.status(200).json({
+      let response: TokenSet = {
         access_token: createJsonWebToken(accessToken),
         id_token: idToken,
         expires_in: 86400,
         token_type: "Bearer",
-      });
+      };
+
+      if(issueRefreshToken(scope)){
+        response.refresh_token = createJsonWebToken({
+          exp: idTokenData.exp,
+          iat: epochTime(),
+          rotations:0,
+          scope,
+        });
+      }
+
+      res.status(200).json(response);
     },
 
     ['/v2/logout']: function *(req, res) {
