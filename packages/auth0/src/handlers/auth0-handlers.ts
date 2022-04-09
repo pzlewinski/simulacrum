@@ -248,6 +248,9 @@ export const createAuth0Handlers = (options: Options): Record<Routes, HttpHandle
 
       if(issueRefreshToken(scope)){
         let refreshTokenPayload = createRefreshToken({ exp: idTokenData.exp, scope });
+
+        assert(!!req.session, "no session");
+
         req.session.refresh_token = response.refresh_token = createJsonWebToken(refreshTokenPayload);
       }
 
