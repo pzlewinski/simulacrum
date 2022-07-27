@@ -70,21 +70,21 @@ export interface IdTokenData {
   iss: string;
   exp: number;
   iat: number;
-  email: string;
   aud: string;
-  sub: string;
+  sub?: string;
   nonce?: string;
+  email?: string;
 }
 
 export interface AccessTokenPayload {
   iss: string;
-  sub: string;
   aud: string;
   iat: number;
   exp: number;
   scope: string;
+  sub?: string;
 
-  [key: string]: string | number | string[];
+  // [key: string]: string | number | string[];
 }
 
 export interface IdToken {
