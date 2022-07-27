@@ -1,14 +1,19 @@
-import type { Slice } from '@effection/atom';
-import type { Operation } from 'effection';
-import { v4 } from 'uuid';
-import type { Faker } from '../faker';
+import type { Slice } from "@effection/atom";
+import type { Operation } from "effection";
+import { v4 } from "uuid";
+import type { Faker } from "../faker";
 import type { Behaviors, Store } from "../interfaces";
 
-export default function(): Behaviors {
+export default function (): Behaviors {
   return {
     services: {},
-    scenarios: { person }
+    scenarios: { person },
   };
+}
+
+export interface AppMetadata {
+  location: Array<string>;
+  roles: Array<string>;
 }
 
 export interface Person {
@@ -17,13 +22,19 @@ export interface Person {
   email?: string;
   password?: string;
   picture?: string;
+  user_metadata?: Record<string, undefined>;
+  app_metadata?: AppMetadata;
 }
 
-export type OptionalParams<T extends { id: string }> = Partial<Omit<T, 'id'>>;
+// export type OptionalParams<T extends { id: string }> = Partial<Omit<T, 'id'>>;
 
-export function person(store: Store, faker: Faker, params: OptionalParams<Person> = {}): Operation<Person> {
-  return function*() {
-    let id = v4();
+export function person(
+  store: Store,
+  faker: Faker,
+  params: Partial<Person> = {}
+): Operation<Person> {
+  return function* () {
+    let id = params.id ?? "auth0|" + v4().replace(/-/g, "").slice(0, 24);
     let slice = records(store).slice(id);
 
     let name = params.name ?? faker.name.findName();
@@ -33,7 +44,9 @@ export function person(store: Store, faker: Faker, params: OptionalParams<Person
       id,
       name,
       email: params.email ?? faker.internet.email(name).toLowerCase(),
-      password: params.password ?? faker.internet.password()
+      password: params.password ?? faker.internet.password(),
+      user_metadata: params.user_metadata,
+      app_metadata: params.app_metadata,
     };
 
     slice.set(attrs);
