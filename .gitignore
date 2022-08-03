@@ -1,6 +1,6 @@
 node_modules
 *.tsbuildinfo
-dist
+# dist
 dist-ui
 __generated__
 /.parcel-cache
