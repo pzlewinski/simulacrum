@@ -2,6 +2,7 @@
   "name": "@simulacrum/repository",
   "version": "0.0.0",
   "description": "Composable simulations for testing, development, and application previews",
+  "private": true,
   "scripts": {
     "clean": "npm run clean -ws",
     "test": "npm run test -ws",
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "@effection/fetch": "^2.0.1",
-    "deepmerge": "^4.2.2"
+    "deepmerge": "^4.2.2",
+    "gitpkg": "^1.0.0-beta.4"
   }
 }

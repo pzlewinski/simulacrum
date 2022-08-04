@@ -13,8 +13,8 @@ Simulacrum removes these constraints from your process by allowing you to simula
 
 ## Existing Simulators
 
-* [auth0](packages/auth0) - [@simulacrum/auth0-simulator](https://www.npmjs.com/package/@simulacrum/auth0-simulator)
-* [ldap](packages/ldap) - [@simulacrum/ldap-simulator](https://www.npmjs.com/package/@simulacrum/ldap-simulator)
+- [auth0](packages/auth0) - [@simulacrum/auth0-simulator](https://www.npmjs.com/package/@simulacrum/auth0-simulator)
+- [ldap](packages/ldap) - [@simulacrum/ldap-simulator](https://www.npmjs.com/package/@simulacrum/ldap-simulator)
 
 ## Usage
 
@@ -22,15 +22,15 @@ Simulacrum is based on a client server architecture. The server can hold any num
 
 To create a simulation in a simulacrum server with one of its available simulators. In this case, we'll assume that there is an `auth0` simulator on the server that we can use to create a simulation.
 
-``` javascript
-import { Client, createClient } from '@simulacrum/client';
+```javascript
+import { Client, createClient } from "@simulacrum/client";
 
-let client = createClient('http://localhost:4000');
+let client = createClient("http://localhost:4000");
 let simulation = await client.createSimulation("auth0");
 // =>
 // services:{
 //   auth0:{
-//     port: 4400 
+//     port: 4400
 //   }
 // }
 //
@@ -40,10 +40,10 @@ The resulting simulation has a list of service endpoints that you can use to con
 
 To create a user that you can log in as, you would run the `person` scenario. This will create a person with realistic data.
 
-``` javascript
+```javascript
 let person = await client.given(simulation, "person");
-person.name // => Paul Waters
-person.email // => paul.waters@gmail.com
+person.name; // => Paul Waters
+person.email; // => paul.waters@gmail.com
 ```
 
 If you have an application that uses `auth0`, check out [`@simulacrum/auth0-simulator`](./packages/auth0) on how you can get started.
@@ -57,6 +57,10 @@ $ npm install
 $ npm run build
 $ npm test
 ```
+
+## Git publish
+
+`yarn workspaces run gitpkg publish`
 
 <!--
 ## Testing
